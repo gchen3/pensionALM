@@ -3,8 +3,8 @@ title: "A Simple Pension Model"
 author: "Don Boyd and Gang Chen"
 date: "04 04 2024"
 output:
-  html_document: null
   pdf_document: default
+  html_document: null
 header-includes: \usepackage{amsmath}
 ---
 
@@ -42,11 +42,11 @@ As for $ct$, we use a fully funding approach with level-dollar 30-year closed am
 
 \begin{equation}
   \tag{3}
-c_t=cn * W_t+\sum\frac{L_j-A_j}{ä_{30}}
+c_t=cn * W_t+(L_j-A_j)/(ä_{30})
 \end{equation}
 
 
-In Equation (3), contribution in year $t$ is the sum of the normal cost and the amortization cost. Let $ä_{30}$ be a 30-year annuity factor to calculate the amortization payment to pay off the unfunded liability $(L-A)$ within 30 years. $ä_{30}= (1-(1+i)^{(-30)}/i$  where $i$ is the interest rate for amortization. We assume that each year’s unfunded liabilities $(L_j-A_j)$ are amortized separately.
+In Equation (3), contribution in year $t$ is the sum of the normal cost and the amortization cost. Let $ä_{30}$ be a 30-year annuity factor to calculate the amortization payment to pay off the unfunded liability $(L-A)$ within 30 years. $ä_{30}= (1-(1+i)^{(-30)}/i$  where $i$ is the interest rate for amortization. 
 
 The assumptions for a typical public plan are listed below, based on the median values in US state pension plans.
 
