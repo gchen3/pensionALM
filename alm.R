@@ -1,4 +1,5 @@
 library(dplyr)
+library(ggplot2)
 
 # Build a simple Asset Liability Model that simulates the evoluation of assets and liabilities over 30 years
 # Inputs are investment returns generated from another ESG model for 30 years
@@ -30,7 +31,8 @@ alm <- data.frame(
   benefit_payment = rep(0, n),
   contribution = rep(0, n),
   investment_returns = rep(0, n),
-  investment_return_rate = rep(0.07, n)
+  investment_return_rate = rep(0.07, n),
+  discount_rate = rep(discount_rate, n)
   )
 
 # Input the investment return rates
@@ -55,8 +57,8 @@ for (i in 2:nrow(alm)) {
   alm$benefit_payment[i] <-alm$benefit_payment[i-1] * (1+salary_growth)
   alm$normal_cost[i] <-  alm$normal_cost[i-1] * (1+salary_growth)
   alm$liability[i] <-  alm$liability[i-1] * (1 + discount_rate) + alm$normal_cost[i] - alm$benefit_payment[i]
-  alm$investment_returns[i] <- (alm$asset[i-1] +alm$contribution[i-1]) * alm$investment_return_rate[i]
-  alm$contribution[i] <- alm$normal_cost[i] + (alm$liability[i-1] * (1 + discount_rate) - (alm$asset[i-1] + alm$investment_returns[i]))/growth_annuity
+  alm$investment_returns[i] <- alm$asset[i-1] * alm$investment_return_rate[i]
+  alm$contribution[i] <- alm$normal_cost[i] + (alm$liability[i-1]  - alm$asset[i-1])/growth_annuity
   alm$asset[i] <- alm$asset[i-1] + alm$contribution[i] + alm$investment_returns[i] - alm$benefit_payment[i]
   }
 
@@ -66,4 +68,7 @@ alm <- alm %>%
   contribution_rate = contribution/payroll,
   funded_ratio = asset/liability)
 
+ggplot(alm, aes(x=year, y=funded_ratio)) + 
+  geom_line() +
+  ylim(0, 1)
 
